@@ -1,0 +1,148 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  // Include binary targets for whatever platform the user is on, ubuntu (dev), and alpine (prod).
+  // binaryTargets   = ["native", "debian-openssl-1.1.x", "linux-musl"]
+  // previewFeatures = ["orderByRelation", "selectRelationCount"]
+}
+
+enum Role {
+  Developer
+  Admin
+  Editor
+  User
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role     @default(User)
+}
+
+model Trainers {
+  name            String            @id
+  imgUrl          String            @default("")
+  discordName     String
+  teamNr          Int               @unique
+  division        Division          @relation(fields: [divisionName], references: [name])
+  divisionName    String
+  Match           TrainerMatch[]
+  PokemonRerolls  PokemonReroll[]
+  TrainerPokemons TrainerPokemons[]
+  trainer1        TrainerMatch[]    @relation("trainer1")
+  trainer2        TrainerMatch[]    @relation("trainer2")
+}
+
+model TrainerPokemons {
+  trainer     Trainers @relation(fields: [trainerName], references: [name])
+  trainerName String
+  pokemon     Pokemon  @relation(fields: [pokemonId], references: [id])
+  pokemonId   Int
+  type        Type     @relation(fields: [typeName], references: [name])
+  typeName    String
+  kills       Int      @default(0)
+
+  @@id([trainerName, pokemonId])
+}
+
+model TimeEvent {
+  event          String          @id
+  index          Int             @unique @default(autoincrement())
+  header         String          @default("")
+  PokemonRerolls PokemonReroll[]
+  TrainerMatch   TrainerMatch[]
+}
+
+model TrainerMatch {
+  id          Int       @id @default(autoincrement())
+  timeEvent   TimeEvent @relation(fields: [eventString], references: [event])
+  eventString String
+  t1          Trainers  @relation("trainer1", fields: [trainer1], references: [name])
+  trainer1    String
+  t2          Trainers  @relation("trainer2", fields: [trainer2], references: [name])
+  trainer2    String
+  winner      Trainers? @relation(fields: [winnerName], references: [name])
+  winnerName  String?
+}
+
+model PokemonReroll {
+  id            Int       @id @default(autoincrement())
+  trainer       Trainers  @relation(fields: [trainerName], references: [name])
+  trainerName   String
+  type          Type      @relation(fields: [typeName], references: [name])
+  typeName      String
+  timeEvent     TimeEvent @relation(fields: [timeEventname], references: [event])
+  timeEventname String
+
+  prevP       Pokemon @relation("prevPokemon", fields: [prevPokemon], references: [id])
+  prevPokemon Int
+  newP        Pokemon @relation("newPokemon", fields: [newPokemon], references: [id])
+  newPokemon  Int
+}
+
+model Division {
+  name            String     @id
+  index           Int        @unique @default(autoincrement())
+  header          String
+  backgroundColor String
+  borderColor     String
+  Trainers        Trainers[]
+}
+
+model Pokemon {
+  id              Int               @id @default(autoincrement())
+  name            String
+  nameDisplay     String
+  dexNr           Int
+  generation      Int
+  color           String
+  isNfe           Boolean
+  isUber          Boolean
+  isForm          Boolean
+  spriteSuffix    String?
+  types           PokemonTypes[]
+  TrainerPokemons TrainerPokemons[]
+  prevPokemon     PokemonReroll[]   @relation("prevPokemon")
+  newPokemon      PokemonReroll[]   @relation("newPokemon")
+}
+
+model PokemonTypes {
+  poke    Pokemon @relation(fields: [pokemon], references: [id])
+  pokemon Int
+  ty      Type    @relation(fields: [type], references: [name])
+  type    String
+
+  @@id([pokemon, type])
+}
+
+model Type {
+  name            String            @id
+  PokemonRerolls  PokemonReroll[]
+  TrainerPokemons TrainerPokemons[]
+  PokemonTypes    PokemonTypes[]
+}
+
+model Rule {
+  id    Int     @id @default(autoincrement())
+  index Int     @unique @default(autoincrement())
+  title String?
+  text  String
+}
+
+// ========================================================
+model Todo {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  text      String
+  completed Boolean
+}

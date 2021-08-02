@@ -1,0 +1,790 @@
+/* table of content
+
+1. Global Styles
+2. Components
+    3.1.  Navbar
+    3.2   Participants
+      3.21   Trainer
+    3.3   Division
+    3.4   Matches
+    3.5   Reroll
+    3.6   Generator
+    3.7   Modal
+3. Btn-Focus
+4. Media Query
+*/
+
+/* ===============
+    global styles
+    =============== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  --color-background: rgb(245, 245, 245);
+  --color-navbar: rgb(24, 25, 28);
+  --color-participants: rgb(243, 195, 195);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+}
+
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.content-container {
+  padding: 2rem 1rem;
+}
+
+/* ===============
+        components
+        =============== */
+
+/* navbar */
+.navbar-container {
+  background-color: var(--color-navbar);
+  color: white;
+
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-btn-expand-div {
+  display: none;
+}
+
+.navbar-btn-expand-div > span {
+  margin-top: 2rem;
+}
+
+.navbar-btn-expand-div > button:focus {
+  outline: none;
+}
+
+.navbar-ul {
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-li {
+  width: 4rem;
+  height: 3rem;
+  border-right: 2px solid rgb(0, 0, 0);
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-link-active {
+  border-bottom: 5px solid rgba(239, 68, 68);
+}
+
+.navbar-item {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.nav-icon {
+  height: 35px;
+  font-size: 2rem;
+  align-self: center;
+}
+
+.navbar-pin {
+  transition: transform 200ms linear;
+  cursor: pointer;
+  padding: 0.15rem;
+}
+
+.navbar-pin-float {
+  transform: translateY(5px);
+  color: rgba(239, 68, 68);
+}
+
+.navbar-pin-stick {
+  transform: translateY(-5px);
+}
+
+.navbar-pin:hover {
+  background-color: rgb(65, 65, 65);
+  border-radius: 8px;
+}
+
+/* still being able to scroll in the navbar 
+      even when it's not expanded but it doesn't show the scrollbar */
+.navbar.content-container::-webkit-scrollbar {
+  display: none;
+}
+
+.navbar.content-container {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* participants */
+.participants-participants {
+  margin-bottom: 3rem;
+}
+
+.tablerow-pokemon:nth-child(odd) {
+  background-color: rgb(250, 250, 250);
+}
+
+.tablerow-pokemon:nth-child(even) {
+  background-color: rgb(230, 230, 230);
+}
+
+/* trainer */
+
+.trainer-container {
+  box-shadow: 10px 10px rgba(0, 0, 0, 0.15);
+  border-bottom: 7px solid var(--color-participants);
+  transition: margin 200ms linear;
+}
+
+.trainer-header {
+  display: flex;
+  position: relative;
+  background-color: var(--color-participants);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.trainer-title {
+  margin-right: 1rem;
+  padding: 1rem 0;
+}
+
+.trainer-carrot-up,
+.trainer-carrot-down {
+  position: absolute;
+  top: 20%;
+  right: 20px;
+  transition: all 300ms linear;
+}
+
+.trainer-carrot-up {
+  top: 25%;
+  rotate: 180deg;
+}
+
+.trainer-content {
+  background-color: white;
+  border-left: 7px solid var(--color-participants);
+  border-right: 7px solid var(--color-participants);
+  transition: max-height 800ms linear;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.trainer-container-expanded {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.trainer-pokemons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.trainer-pokemon {
+  width: 17rem;
+  display: flex;
+  margin: 0.2rem 0;
+}
+
+.trainer-pokemon-type {
+  width: 5rem;
+  height: 1.6rem;
+  color: white;
+  text-align: center;
+  align-self: center;
+  font-family: "Roboto", arial;
+  line-height: 1.65rem;
+}
+
+.trainer-pokemon-img {
+  width: 30px;
+  height: 30px;
+  margin: 0 0.5rem;
+}
+
+.trainer-pokemon-name {
+  align-self: center;
+}
+
+/* division */
+.rooster-divisions-container {
+  font-size: 0.8rem;
+  overflow-x: auto;
+  padding: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(0px, 1fr));
+}
+
+.rooster-divisions-container {
+  display: grid;
+  grid-gap: 1rem;
+  font-size: 1rem;
+}
+
+.rooster-division {
+  width: 100%;
+  height: 100%;
+  margin: 5px 5px;
+  border-radius: 20px;
+}
+
+.rooster-division > h2 {
+  text-align: center;
+  border-bottom: 3px dashed white;
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.rooster-team {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  margin: 0 0.5rem;
+}
+.rooster-border-top-name {
+  border-top: 1px solid black;
+}
+
+.rooster-team-name {
+  margin: 0;
+  padding: 0;
+}
+
+.rooster-team-scores {
+  display: flex;
+}
+.rooster-team-scores > p {
+  margin: 0;
+  padding: 0 0.5rem;
+}
+
+.rooster-team-scores > p:first-child {
+  border-right: 1px solid black;
+}
+
+.rooster-team-games-won {
+  color: green;
+}
+.rooster-team-games-lost {
+  color: red;
+}
+
+/* matches */
+
+.matches-container {
+  margin: 0 auto;
+}
+
+.match {
+  display: flex;
+  height: 2rem;
+  justify-content: center;
+}
+
+.team {
+  width: 12rem;
+  font-size: 0.8rem;
+  align-self: center;
+}
+
+.team-left {
+  text-align: end;
+}
+
+.vs {
+  margin: auto 1rem;
+}
+
+.match-won {
+  color: green;
+}
+.match-lost {
+  color: red;
+}
+
+.trainer-header:hover {
+  background-color: #ff8181;
+}
+
+/* Reroll */
+.reroll-container {
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem 0.5rem;
+}
+
+.poke-reroll-week-container,
+.poke-reroll-trainer-container,
+.matches-trainer-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  overflow-x: auto;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  padding: 1rem 0;
+}
+
+.reroll-trainer {
+  font-size: 0.8rem;
+  line-height: 1.75rem;
+  padding-left: 0.5rem;
+  min-width: 6rem;
+}
+
+.reroll-type {
+  margin: 0 0.6rem;
+}
+
+.reroll-arrow {
+  font-size: 2rem;
+  line-height: 1.25rem;
+}
+
+/* Generator */
+/* option */
+.participants-participants h2 {
+  text-align: center;
+  margin-bottom: 1.25rem;
+  font-family: "Roboto", arial;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.option-content {
+  margin-bottom: 4rem;
+}
+
+.generator-btn {
+  position: relative;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  /* background-color: rgb(68, 68, 68); */
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+  border: none;
+  border-radius: 0 10px 0 10px;
+  box-shadow: 0 1px 0 #666, 0 5px 0 rgb(38, 38, 38), 0 6px 6px rgba(0, 0, 0, 0.6);
+  transition: all 0.5s;
+}
+
+.generator-btn-inactive {
+  opacity: 0.3;
+  box-shadow: 0 1px 0 #666, 0 2px 0 rgb(38, 38, 38), 0 2px 2px rgba(0, 0, 0, 0.9);
+  transform: translateY(3px);
+  animation: none;
+}
+
+.generator-btn-inactive {
+  transform: scale(0.95);
+  opacity: 0.3;
+  box-shadow: 0 1px 0 #666, 0 2px 0 #444, 0 2px 2px rgba(0, 0, 0, 0.9);
+  -webkit-transform: translateY(3px);
+  transform: translateY(3px);
+  -webkit-animation: none;
+  animation: none;
+}
+
+/* btn click */
+.btn-click-down-up:active {
+  text-shadow: 0 -1px 0 #444, 0 0 5px #ffd, 0 0 8px #fff;
+  box-shadow: 0 1px 0 #666, 0 2px 0 #444, 0 2px 2px rgba(0, 0, 0, 0.9);
+  -webkit-transform: translateY(3px);
+  transform: translateY(3px);
+  -webkit-animation: none;
+  animation: none;
+  transition: all 150ms ease;
+}
+
+/* Modal */
+.modal-blend-in {
+  animation-name: blendin;
+  animation-duration: 1s;
+}
+
+@keyframes blendin {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-blend-out {
+  animation-name: blendout;
+  animation-duration: 1s;
+}
+
+@keyframes blendout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Cards */
+.pokemon-card {
+  width: 10rem;
+  /* min-height: 8rem; */
+  padding: 0.2rem;
+  margin: 0.25rem;
+  border: 2px solid #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 20px;
+  font-family: "Roboto", sans-serif;
+}
+
+.pokemon-generator-sprite {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin: 0.5rem auto 0 auto;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.pokemon-generator-pokeName {
+  margin: 0.8rem 0;
+  color: white;
+  text-align: center;
+}
+
+.pokemon-generator-type {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* loader */
+/* dot loader */
+.pokemon-cards-loader,
+.pokemon-cards-loader:before,
+.pokemon-cards-loader:after {
+  border-radius: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation: load7 1.8s infinite ease-in-out;
+  animation: load7 1.8s infinite ease-in-out;
+}
+.pokemon-cards-loader {
+  color: #262626;
+  font-size: 10px;
+  margin: 0px auto;
+  position: relative;
+  text-indent: -9999em;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.pokemon-cards-loader:before,
+.pokemon-cards-loader:after {
+  content: "";
+  position: absolute;
+  top: 0;
+}
+.pokemon-cards-loader:before {
+  left: -3.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.pokemon-cards-loader:after {
+  left: 3.5em;
+}
+@-webkit-keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+@keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+
+/* circle loader */
+.loader {
+  font-size: 2px;
+  margin-right: 0.5rem;
+  text-indent: -9999em;
+  width: 11em;
+  height: 11em;
+  border-radius: 50%;
+  background: #ffffff;
+  background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  position: relative;
+  -webkit-animation: load3 1.4s infinite linear;
+  animation: load3 1.4s infinite linear;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+.loader:before {
+  width: 50%;
+  height: 50%;
+  background: #ffffff;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: "";
+}
+.loader:after {
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  content: "";
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.loader-green:after {
+  background: #a7f3d0;
+}
+.loader-red:after {
+  background: rgba(239, 68, 68, 1);
+}
+@-webkit-keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+/* ===============
+        media queries
+        =============== */
+
+/* 'tablet': '640px', */
+@media (min-width: 640px) {
+  /* ===============
+        global styles
+        =============== */
+  .website-container {
+    display: flex;
+  }
+
+  h1 {
+    font-size: 4rem;
+  }
+
+  .content-container {
+    padding: 2rem 4rem;
+    max-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  .content-container > div {
+    margin-bottom: 10rem;
+  }
+
+  /* ===============
+        components
+        =============== */
+
+  /* navbar */
+  .navbar-container {
+    min-width: 3rem;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .navbar-btn-expand-div {
+    display: block;
+    text-align: end;
+    margin-right: 10px;
+  }
+
+  .navbar-container-maximum {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .navbar-ul {
+    display: block;
+    width: 100%;
+    margin-bottom: 5rem;
+  }
+
+  .navbar-li {
+    display: block;
+    width: 100%;
+    height: auto;
+    line-height: 65px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: 0.4s;
+    border-bottom: 2px solid rgb(0, 0, 0);
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    border-right: none;
+    border-left: none;
+  }
+
+  .navbar-link-active {
+    border-right: 5px solid rgba(239, 68, 68);
+    border-bottom: none;
+  }
+
+  .navbar-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 65px;
+  }
+
+  .nav-icon {
+    height: 20px;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-right: 12px;
+    margin-left: 12px;
+  }
+
+  .nav-icon-image {
+    height: 30px;
+    margin-right: 10px;
+    margin-left: 7px;
+  }
+
+  /* Reroll */
+  .reroll-container {
+    min-width: 20rem;
+    margin: 0.5rem 0.5rem;
+  }
+
+  .reroll-trainer {
+    font-size: 1rem;
+    line-height: 1.75rem;
+    padding-left: 0.5rem;
+    width: 8rem;
+  }
+
+  .reroll-type {
+    font-size: 0.8rem;
+    width: 3rem;
+  }
+
+  /* needs to be in here */
+  .navbar-container:not(.navbar-container-maximum) {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .navbar-container:hover {
+    overflow-y: auto;
+  }
+  .navbar-li:hover {
+    background-color: rgb(233, 128, 115);
+  }
+
+  /* ===============
+        matches
+    =============== */
+  .team {
+    font-size: 1rem;
+  }
+  /* ===============
+        Button
+    =============== */
+  .generator-btn {
+    font-size: 1.3rem;
+  }
+}
+
+@media (min-width: 800px) {
+  /* Reroll */
+  .reroll-trainer {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    padding-left: 0.5rem;
+    width: 14rem;
+  }
+
+  .poke-reroll-week-container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  }
+}
+
+/* 'laptop': '1024px', */
+@media (min-width: 1024px) {
+}
+
+/* 'desktop': '1280px', */
+@media (min-width: 1280px) {
+}
+
+@media (min-width: 1400px) {
+  .rooster-divisions-container {
+    font-size: 1rem;
+  }
+}
